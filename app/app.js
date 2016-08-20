@@ -1,43 +1,3 @@
-var Node = React.createClass({
-	render : function(){
-		var childNodes;
-		if (this.props.children) {
-			childNodes = this.props.children.map(function(node,i){
-				return (
-					<Node title={node.title} key={i} children={node.children}/>
-				);
-			})
-		}
-
-		return (
-				<div className="tree-node">
-					<span className="title">{this.props.title}</span>
-					<div className={(this.props.children && this.props.children.length) ?
-													"children" :
-													"empty-children"}>
-						{childNodes}
-					</div>
-				</div>
-		)
-	}
-});
-
-var TreeView = React.createClass({
-	render : function(){
-
-		var nodes = this.props.data.map(function(node, i){
-			return (
-				<Node title={node.title} key={i} children={node.children}/>
-			);
-		});
-		return (
-			<div className="tree-view">
-				{nodes}
-			</div>
-		)
-	}
-});
-
 var App = React.createClass({
 	getInitialState : function() {
 		return {data:[]};
@@ -47,7 +7,6 @@ var App = React.createClass({
 			url : "./app/testData.json",
 			dataType : "json",
 			success : function(data){
-				console.log(data);
 				this.setState({data : data});
 			}.bind(this),
 			error : function(xhr,status,err){
@@ -58,6 +17,7 @@ var App = React.createClass({
 	render : function() {
 		return (
 			<div className="app-content">
+				<Header />
 				<TreeView data={this.state.data}/>
 			</div>
 		)

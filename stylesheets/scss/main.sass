@@ -1,5 +1,12 @@
-$font-general : Helvetica, sans-serif
+$font-general : 'Raleway', sans-serif
 $color-general : #333
+$header-color : skyblue
+
+=transition($transition)
+  -moz-transition : $transition
+  -o-transition : $transition
+  -webkit-transition : $transition
+  transition : $transition
 
 body
   font-family: $font-general
@@ -7,6 +14,49 @@ body
   background-color: whitesmoke
   margin : 0
   padding : 0
+
+nav
+  height: 100%
+  text-align: center
+  [type=text]
+    padding: 10px
+    border: 0
+    width: 30%
+    font-family: $font-general
+    +transition(all 1s)
+    background-image: url('http://www.freeiconspng.com/uploads/search-icon-png-2.png')
+    background-size: auto 60%
+    background-position: right 10px center
+    background-repeat: no-repeat
+    &:hover,&:focus
+      width: 80%
+  .left-menu
+    text-align: left
+  .right-menu
+    text-align: right
+  > div
+    display: inline-block
+    width: 49%
+  .link-button
+    display: inline-block
+    text-decoration: none
+    height: 100%
+    line-height: 60px
+    vertical-align: middle
+    padding: 0 30px
+    color : white
+    font-size: 20px
+    font-weight: bold
+    background-color: darken($header-color, 2%)
+    +transition(background-color 0.2s)
+    &:hover
+      background-color: darken($header-color, 8%)
+
+header
+  width: 100%
+  height: 60px
+  background-color: $header-color
+  display: block
 
 .tree-view
   padding: 10px

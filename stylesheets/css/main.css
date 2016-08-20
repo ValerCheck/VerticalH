@@ -1,9 +1,58 @@
 body {
-  font-family: Helvetica, sans-serif;
+  font-family: "Raleway", sans-serif;
   color: #333;
   background-color: whitesmoke;
   margin: 0;
   padding: 0; }
+
+nav {
+  height: 100%;
+  text-align: center; }
+  nav [type=text] {
+    padding: 10px;
+    border: 0;
+    width: 30%;
+    font-family: "Raleway", sans-serif;
+    -moz-transition: all 1s;
+    -o-transition: all 1s;
+    -webkit-transition: all 1s;
+    transition: all 1s;
+    background-image: url("http://www.freeiconspng.com/uploads/search-icon-png-2.png");
+    background-size: auto 60%;
+    background-position: right 10px center;
+    background-repeat: no-repeat; }
+    nav [type=text]:hover, nav [type=text]:focus {
+      width: 80%; }
+  nav .left-menu {
+    text-align: left; }
+  nav .right-menu {
+    text-align: right; }
+  nav > div {
+    display: inline-block;
+    width: 49%; }
+  nav .link-button {
+    display: inline-block;
+    text-decoration: none;
+    height: 100%;
+    line-height: 60px;
+    vertical-align: middle;
+    padding: 0 30px;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #7ecaea;
+    -moz-transition: background-color 0.2s;
+    -o-transition: background-color 0.2s;
+    -webkit-transition: background-color 0.2s;
+    transition: background-color 0.2s; }
+    nav .link-button:hover {
+      background-color: #64c0e5; }
+
+header {
+  width: 100%;
+  height: 60px;
+  background-color: skyblue;
+  display: block; }
 
 .tree-view {
   padding: 10px; }
