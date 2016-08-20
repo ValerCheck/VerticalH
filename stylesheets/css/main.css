@@ -1,0 +1,18 @@
+body {
+  font-family: Helvetica, sans-serif;
+  color: #333;
+  background-color: whitesmoke;
+  margin: 0;
+  padding: 0; }
+
+.tree-view {
+  padding: 10px; }
+
+.tree-node .children {
+  padding-left: 20px; }
+
+.tree-node .empty-children {
+  display: none; }
+
+.tree-node .title {
+  text-transform: uppercase; }

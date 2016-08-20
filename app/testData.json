@@ -1,0 +1,22 @@
+[
+  {
+    "title" : "World",
+    "children" : [
+      {
+        "title" : "Europe",
+        "children" : [
+          {
+            "title" : "Ukraine",
+            "children" : [
+              { "title" : "Kyiv" },
+              { "title" : "Vinnytsa" },
+              { "title" : "Poltava" },
+              { "title" : "Lutsk" },
+              { "title" : "Odesa" }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
