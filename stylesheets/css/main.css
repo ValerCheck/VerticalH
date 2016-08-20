@@ -56,6 +56,16 @@ header {
 
 .tree-view {
   padding: 10px; }
+  .tree-view .expander {
+    font-size: 20px;
+    display: inline-block;
+    line-height: 18px;
+    margin: 5px 0 0 5px;
+    border: 1px solid grey;
+    padding: 0 5px;
+    border-radius: 10px; }
+    .tree-view .expander.hide {
+      display: none; }
 
 .tree-node .children {
   padding-left: 20px; }

@@ -26,7 +26,9 @@ window.Node = React.createClass({
 				<div className="tree-node">
 					<span className="title" onClick={this.toggleChildren}>
 						{this.props.title}
-						<span className="expander">{this.state.expander}</span>
+						<span className={this.props.children&&this.props.children.length?
+														"expander":
+														"expander hide"}>{this.state.expander}</span>
 					</span>
 					<div className={this.state.childrenClass}>
 						{childNodes}
