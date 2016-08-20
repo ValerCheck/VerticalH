@@ -1,4 +1,17 @@
 window.Node = React.createClass({
+	getInitialState : function(){
+		return {expander : (this.props.children&&this.props.children.length ?
+												"+" : ""),
+						childrenClass : (this.props.children&&this.props.children.length ?
+														"children hide" :
+														"empty-children")}
+	},
+	toggleChildren : function(){
+		if (this.state.expander == "+")
+			this.setState({expander:"-",childrenClass:"children show"})
+		else if (this.state.expander == "-")
+			this.setState({expander:"+",childrenClass:"children hide"})
+	},
 	render : function(){
 		var childNodes;
 		if (this.props.children) {
@@ -11,10 +24,11 @@ window.Node = React.createClass({
 
 		return (
 				<div className="tree-node">
-					<span className="title">{this.props.title}</span>
-					<div className={(this.props.children && this.props.children.length) ?
-													"children" :
-													"empty-children"}>
+					<span className="title" onClick={this.toggleChildren}>
+						{this.props.title}
+						<span className="expander">{this.state.expander}</span>
+					</span>
+					<div className={this.state.childrenClass}>
 						{childNodes}
 					</div>
 				</div>

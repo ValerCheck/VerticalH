@@ -59,9 +59,13 @@ header {
 
 .tree-node .children {
   padding-left: 20px; }
+  .tree-node .children.hide {
+    display: none; }
 
 .tree-node .empty-children {
   display: none; }
 
 .tree-node .title {
-  text-transform: uppercase; }
+  text-transform: uppercase;
+  display: inline-block;
+  cursor: pointer; }
