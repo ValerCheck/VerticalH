@@ -3,17 +3,21 @@ var App = React.createClass({
 		return {data:[]};
 	},
 	componentDidMount : function(){
-		var geoPoints = JSON.parse(GetItem('geoPoints'));
-		console.log(geoPoints);
+		/*var geoPoints = JSON.parse(GetItem('geoPoints'));
 		if (geoPoints) {
 			this.setState({data : [geoPoints]});
 			console.log('geoPoints are in local');
 			return;
-		};
+		};*/
 		$.ajax({
 			url : this.props.url,
 			dataType : "json",
 			success : function(data){
+				console.log(data);
+				if (data[0].title) {
+					this.setState({data : data});
+					return;
+				}
 				var handleNode = function(parent,country,field){
 					var node = parent.children.filter(function(el){
 						return el.title == country[field];
@@ -23,9 +27,9 @@ var App = React.createClass({
 						children 	: []
 					}];
 					parent.children.push(node[0]);
-
 					return node;
 				}
+
 				var geoPoints = {title:"World",children:[]};
 				data.forEach(function(country){
 					if (!country.region || !country.subregion) return;
@@ -58,6 +62,6 @@ var App = React.createClass({
 })
 
 ReactDOM.render(
-	<App url="https://restcountries.eu/rest/v1/all"/>,
+	<App url="./app/testData.json"/>,
 	document.getElementById('app-container')
 );
