@@ -7,7 +7,15 @@
 	</head>
 	<body>
 		<script>
-			var Header, Navigation, TreeView, TreeNode;
+			var SetItem = function(key,value){
+				localStorage.setItem(key,value);
+			};
+			var GetItem = function(key) {
+				return localStorage.getItem(key);
+			}
+			var RemoveItem = function(key) {
+				localStorage.removeItem(key);
+			}
 		</script>
 		<div id="app-container"></div>
 		<!--<script type="javascript" src="./node_modules/react/dist/react.min.js"></script>

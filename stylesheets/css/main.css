@@ -70,7 +70,8 @@ header {
 .tree-node .children {
   padding-left: 20px; }
   .tree-node .children.hide {
-    display: none; }
+    height: 0;
+    overflow-y: hidden; }
 
 .tree-node .empty-children {
   display: none; }

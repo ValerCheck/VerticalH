@@ -40,6 +40,7 @@ window.Node = React.createClass({
 
 window.TreeView = React.createClass({
 	render : function(){
+		console.log(this.props.data);
 		var nodes = this.props.data.map(function(node, i){
 			return (
 				<Node title={node.title} key={i} children={node.children}/>

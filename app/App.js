@@ -3,11 +3,44 @@ var App = React.createClass({
 		return {data:[]};
 	},
 	componentDidMount : function(){
+		var geoPoints = JSON.parse(GetItem('geoPoints'));
+		console.log(geoPoints);
+		if (geoPoints) {
+			this.setState({data : [geoPoints]});
+			console.log('geoPoints are in local');
+			return;
+		};
 		$.ajax({
-			url : "./app/testData.json",
+			url : this.props.url,
 			dataType : "json",
 			success : function(data){
-				this.setState({data : data});
+				var handleNode = function(parent,country,field){
+					var node = parent.children.filter(function(el){
+						return el.title == country[field];
+					});
+					node = node.length ? node : [{
+						title 		: country[field],
+						children 	: []
+					}];
+					parent.children.push(node[0]);
+
+					return node;
+				}
+				var geoPoints = {title:"World",children:[]};
+				data.forEach(function(country){
+					if (!country.region || !country.subregion) return;
+
+					var region = handleNode(geoPoints, country,'region');
+					var subRegion = handleNode(region[0], country,'subregion');
+					var localCountry = handleNode(subRegion[0], country, 'name');
+
+					if (country.capital) {
+						localCountry[0].children.push({title : country.capital})
+					} else localCountry[0].children = undefined;
+
+				});
+				this.setState({data : [geoPoints]});
+				SetItem('geoPoints',JSON.stringify(geoPoints));
 			}.bind(this),
 			error : function(xhr,status,err){
 				console.error("./js/testData.json",status,err.toString());
@@ -25,6 +58,6 @@ var App = React.createClass({
 })
 
 ReactDOM.render(
-	<App/>,
+	<App url="https://restcountries.eu/rest/v1/all"/>,
 	document.getElementById('app-container')
 );
