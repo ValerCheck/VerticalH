@@ -52,16 +52,18 @@ var App = React.createClass({
 		});
 	},
 	render : function() {
-		return (
-			<div className="app-content">
-				<Header />
-				<TreeView data={this.state.data}/>
-			</div>
-		)
+		return React.createElement("div",{
+				className : "app-content"
+			},
+				React.createElement(Header),
+				React.createElement(TreeView,{
+					data : this.state.data
+				})
+			);
 	}
 })
 
 ReactDOM.render(
-	<App url="./app/testData.json"/>,
+	React.createElement(App,{url:"./app/testData.json"}),
 	document.getElementById('app-container')
 );

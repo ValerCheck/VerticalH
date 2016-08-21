@@ -16,25 +16,29 @@ window.Node = React.createClass({
 		var childNodes;
 		if (this.props.children) {
 			childNodes = this.props.children.map(function(node,i){
-				return (
-					<Node title={node.title} key={i} children={node.children}/>
-				);
-			})
+				return React.createElement(Node,Object.assign({},this.props,{
+					title : node.title,
+					children : node.children,
+					key: i
+				}));
+			});
 		}
-
-		return (
-				<div className="tree-node">
-					<span className="title" onClick={this.toggleChildren}>
-						{this.props.title}
-						<span className={this.props.children&&this.props.children.length?
-														"expander":
-														"expander hide"}>{this.state.expander}</span>
-					</span>
-					<div className={this.state.childrenClass}>
-						{childNodes}
-					</div>
-				</div>
-		)
+		return React.createElement("div",{className : "tree-node"},
+			React.createElement("span",{
+				className : "title",
+				onClick : this.toggleChildren
+			},
+				this.props.title,
+				React.createElement("span",{
+					className:
+					(this.props.children&&this.props.children.length?
+						"expander":
+						"expander hide"
+					)
+				},this.state.expander)
+			),
+			React.createElement("div",{className:this.state.childrenClass},
+				childNodes));
 	}
 });
 
@@ -42,14 +46,12 @@ window.TreeView = React.createClass({
 	render : function(){
 		console.log(this.props.data);
 		var nodes = this.props.data.map(function(node, i){
-			return (
-				<Node title={node.title} key={i} children={node.children}/>
-			);
+			return React.createElement(Node,Object.assign({},this.props,{
+				title:node.title,
+				children:node.children,
+				key:i
+			}));
 		});
-		return (
-			<div className="tree-view">
-				{nodes}
-			</div>
-		)
+		return React.createElement("div",{className:"tree-view"},nodes);
 	}
 });

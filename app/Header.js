@@ -1,9 +1,10 @@
 window.Header = React.createClass({
   render : function(){
-    return (
+    return React.createElement("header",null,React.createElement(window.Navigation));
+    /*(
       <header>
         <Navigation/>
       </header>
-    )
+    )*/
   }
 });
