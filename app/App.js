@@ -3,30 +3,29 @@ var App = React.createClass({
 		return {data:[]};
 	},
 	componentDidMount : function(){
-		/*var geoPoints = JSON.parse(GetItem('geoPoints'));
+		var geoPoints = JSON.parse(GetItem('geoPoints'));
 		if (geoPoints) {
+			debugger;
 			this.setState({data : [geoPoints]});
 			console.log('geoPoints are in local');
 			return;
-		};*/
+		};
 		$.ajax({
 			url : this.props.url,
 			dataType : "json",
 			success : function(data){
-				console.log(data);
-				if (data[0].title) {
-					this.setState({data : data});
-					return;
-				}
 				var handleNode = function(parent,country,field){
 					var node = parent.children.filter(function(el){
 						return el.title == country[field];
 					});
-					node = node.length ? node : [{
-						title 		: country[field],
-						children 	: []
-					}];
-					parent.children.push(node[0]);
+					
+					if (!node.length) {
+						node = [{
+							title 		: country[field],
+							children 	: []
+						}];
+						parent.children.push(node[0])
+					}
 					return node;
 				}
 
@@ -43,6 +42,8 @@ var App = React.createClass({
 					} else localCountry[0].children = undefined;
 
 				});
+				console.log(geoPoints);
+				debugger;
 				this.setState({data : [geoPoints]});
 				SetItem('geoPoints',JSON.stringify(geoPoints));
 			}.bind(this),
@@ -64,6 +65,6 @@ var App = React.createClass({
 })
 
 ReactDOM.render(
-	React.createElement(App,{url:"./app/testData.json"}),
+	React.createElement(App,{url:"https://restcountries.eu/rest/v1/all"}),
 	document.getElementById('app-container')
 );
