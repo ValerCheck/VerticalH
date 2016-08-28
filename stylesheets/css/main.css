@@ -80,3 +80,5 @@ header {
   text-transform: uppercase;
   display: inline-block;
   cursor: pointer; }
+  .tree-node .title.leaf {
+    font-weight: bold; }

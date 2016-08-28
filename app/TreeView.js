@@ -25,7 +25,9 @@ window.Node = React.createClass({
 		}
 		return React.createElement("div",{className : "tree-node"},
 			React.createElement("span",{
-				className : "title",
+				className : this.props.children ?
+										"title":
+										"title leaf",
 				onClick : this.toggleChildren
 			},
 				this.props.title,
