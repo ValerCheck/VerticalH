@@ -8,12 +8,7 @@ var App = React.createClass({
 			url 	: "https://restcountries.eu/rest/v1/all"
 		});
 		return;
-		var geoPoints = JSON.parse(GetItem('geoPoints'));
-		if (geoPoints) {
-			this.setState({data : [geoPoints]});
-			console.log('geoPoints are in local');
-			return;
-		};
+
 		$.ajax({
 			url : this.props.url,
 			dataType : "json",
@@ -61,18 +56,18 @@ var App = React.createClass({
 				className : "app-content"
 			},
 				React.createElement(Header),
-				React.createElement(TreeView)//,{
-					//data : this.state.treeViewReducer.data
-				//})
+				React.createElement(TreeView)
 			);
 	}
 })
 
-const store = Redux.createStore(appReducer);
+const store = Redux.createStore(appReducer,Redux.applyMiddleware(ReduxThunk.default));
+store.dispatch(fetchData()).then(function(){
+	ReactDOM.render(
+		React.createElement(ReactRedux.Provider,{store:store},
+			React.createElement(App)
+		),
+		document.getElementById('app-container')
+	);
+})
 //debugger;
-ReactDOM.render(
-	React.createElement(ReactRedux.Provider,{store:store},
-		React.createElement(App)
-	),
-	document.getElementById('app-container')
-);

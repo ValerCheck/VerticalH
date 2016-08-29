@@ -1,9 +1,17 @@
 var nextNodeId = 0;
+var ids = [];
 
 const ADD_NODE = function(title,children){
+  //var nextId = 0;
+  /*while (ids.indexOf(nextId) > -1)
+    nextId = Math.floor((Math.random() * 1024) + 1);*/
+  while(ids.indexOf(nextNodeId) > -1)
+    nextNodeId+=1;
+  ids.push(nextNodeId);
+
   return {
     type : 'ADD_NODE',
-    id : ++nextNodeId,
+    id : nextNodeId,
     title,
     children
   }
@@ -51,16 +59,26 @@ function nodeReducer(state, action){
 }
 
 function treeViewReducer(state, action){
-  state = state || {data : []};//{data:{},url:"https://restcountries.eu/rest/v1/all"};
+  state = state || {data : [],isFetching:false};
   switch(action.type){
+    case 'REQUEST_DATA':
+      return Object.assign({},state,{
+        isFetching : true
+      });
+    case 'RECEIVE_DATA':
+      return Object.assign({},state,{
+        isFetching : false,
+        data : action.data
+      });
     case 'FETCH_DATA':
       console.log('IN FETCH_DATA');
-      if (GetItem('geoPoints')) {
-        var data = [JSON.parse(GetItem('geoPoints'))].map(
-          function(el){
+      if (GetItem('geoPoints') || action.data) {
+        var obj = GetItem('geoPoints') || action.data;
+        var data = [JSON.parse(obj)].map(
+          function(el) {
             return nodeReducer(undefined,ADD_NODE(el.title,el.children));
           });
-        return Object.assign({},state,{data});
+        return Object.assign({},state,{isFetching:false,data});
       }
       else return state;
     case 'TOGGLE_NODE':
@@ -122,3 +140,48 @@ const mapDispatchToPropsTreeView = function(dispatch){
 const appReducer = Redux.combineReducers({
   treeViewReducer
 });
+
+function fetchData(){
+  return function(dispatch){
+    if (GetItem('geoPoints')) return Promise.resolve(true);
+    dispatch({type:'REQUEST_DATA'});
+    return fetch("https://restcountries.eu/rest/v1/all")
+      .then(function(response){
+        return response.json()
+      })
+      .then(function(data){
+
+        var handleNode = function(parent,country,field){
+          var node = parent.children.filter(function(el){
+            return el.title == country[field];
+          });
+
+          if (!node.length) {
+            node = [{
+              title 		: country[field],
+              children 	: []
+            }];
+            parent.children.push(node[0])
+          }
+          return node;
+        }
+
+        var geoPoints = {title:"World",children:[]};
+        data.forEach(function(country){
+          if (!country.region || !country.subregion) return;
+
+          var region = handleNode(geoPoints, country,'region');
+          var subRegion = handleNode(region[0], country,'subregion');
+          var localCountry = handleNode(subRegion[0], country, 'name');
+
+          if (country.capital) {
+            localCountry[0].children.push({title : country.capital})
+          } else localCountry[0].children = undefined;
+
+        });
+        console.log(geoPoints);
+        SetItem('geoPoints',JSON.stringify(geoPoints));
+        dispatch({type:'FETCH_DATA',data : [geoPoints]})
+      });
+  }
+}
