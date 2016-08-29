@@ -1,11 +1,15 @@
 var App = React.createClass({
-	getInitialState : function() {
+	/*getInitialState : function() {
 		return {data:[]};
-	},
+	},*/
 	componentDidMount : function(){
+		store.dispatch({
+			type 	: 'FETCH_DATA',
+			url 	: "https://restcountries.eu/rest/v1/all"
+		});
+		return;
 		var geoPoints = JSON.parse(GetItem('geoPoints'));
 		if (geoPoints) {
-			debugger;
 			this.setState({data : [geoPoints]});
 			console.log('geoPoints are in local');
 			return;
@@ -18,7 +22,7 @@ var App = React.createClass({
 					var node = parent.children.filter(function(el){
 						return el.title == country[field];
 					});
-					
+
 					if (!node.length) {
 						node = [{
 							title 		: country[field],
@@ -44,7 +48,7 @@ var App = React.createClass({
 				});
 				console.log(geoPoints);
 				debugger;
-				this.setState({data : [geoPoints]});
+				//this.setState({data : [geoPoints]});
 				SetItem('geoPoints',JSON.stringify(geoPoints));
 			}.bind(this),
 			error : function(xhr,status,err){
@@ -57,14 +61,18 @@ var App = React.createClass({
 				className : "app-content"
 			},
 				React.createElement(Header),
-				React.createElement(TreeView,{
-					data : this.state.data
-				})
+				React.createElement(TreeView)//,{
+					//data : this.state.treeViewReducer.data
+				//})
 			);
 	}
 })
 
+const store = Redux.createStore(appReducer);
+//debugger;
 ReactDOM.render(
-	React.createElement(App,{url:"https://restcountries.eu/rest/v1/all"}),
+	React.createElement(ReactRedux.Provider,{store:store},
+		React.createElement(App)
+	),
 	document.getElementById('app-container')
 );

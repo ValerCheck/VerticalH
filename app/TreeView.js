@@ -1,59 +1,82 @@
 window.Node = React.createClass({
-	getInitialState : function(){
-		return {expander : (this.props.children&&this.props.children.length ?
-												"+" : ""),
-						childrenClass : (this.props.children&&this.props.children.length ?
-														"children hide" :
-														"empty-children")}
-	},
-	toggleChildren : function(){
-		if (this.state.expander == "+")
-			this.setState({expander:"-",childrenClass:"children show"})
-		else if (this.state.expander == "-")
-			this.setState({expander:"+",childrenClass:"children hide"})
-	},
 	render : function(){
 		var childNodes;
-		if (this.props.children) {
-			childNodes = this.props.children.map(function(node,i){
-				return React.createElement(Node,Object.assign({},this.props,{
-					title : node.title,
-					children : node.children,
-					key: i
+		var self = this.props;
+		if (this.props.children){
+			childNodes = self.children.map(function(node){
+				return React.createElement(Node,Object.assign({},node,{
+					key:node.id
 				}));
 			});
 		}
-		return React.createElement("div",{className : "tree-node"},
+
+		return React.createElement("div",{
+			className : "tree-node",
+			key : self.id
+			onClick : function(e){
+				e.stopPropagation();
+				store.dispatch(TOGGLE_NODE(self.id));
+			}
+		},
 			React.createElement("span",{
-				className : this.props.children ?
+				className : self.children ?
 										"title":
 										"title leaf",
-				onClick : this.toggleChildren
 			},
-				this.props.title,
+				self.title,
 				React.createElement("span",{
 					className:
-					(this.props.children&&this.props.children.length?
+					(self.children && self.children.length?
 						"expander":
 						"expander hide"
 					)
-				},this.state.expander)
+				},self.expander)
 			),
-			React.createElement("div",{className:this.state.childrenClass},
+			React.createElement("div",{className:self.childrenClass},
 				childNodes));
 	}
 });
 
+var lazyNodeType = (function(){
+	return lazyNode.apply(this,arguments);
+});
+
+var lazyNode = React.PropTypes.shape({
+	id : React.PropTypes.number.isRequired,
+	title : React.PropTypes.string,
+	expander : React.PropTypes.string,
+	childrenClass : React.PropTypes.string,
+	children : React.PropTypes.arrayOf(lazyNodeType)
+});
+
+window.Node.propTypes = {
+	id : React.PropTypes.number,
+	title : React.PropTypes.string,
+	expander : React.PropTypes.string,
+	childrenClass : React.PropTypes.string,
+	children : React.PropTypes.arrayOf(lazyNode)
+}
+
 window.TreeView = React.createClass({
 	render : function(){
-		console.log(this.props.data);
-		var nodes = this.props.data.map(function(node, i){
-			return React.createElement(Node,Object.assign({},this.props,{
-				title:node.title,
-				children:node.children,
-				key:i
+		var self = this.props;
+		if (!self.data.length)
+			return React.createElement("div",{className:"tree-view"});
+
+		var nodes = self.data.map(function(node){
+			return React.createElement(Node,Object.assign({},node,{
+				key					: node.id,
 			}));
 		});
+
 		return React.createElement("div",{className:"tree-view"},nodes);
 	}
 });
+
+window.TreeView.propTypes = {
+	data : React.PropTypes.arrayOf(React.PropTypes.object.isRequired)
+}
+
+window.TreeView = ReactRedux.connect(
+  mapStateToPropsTreeView
+)(TreeView);
