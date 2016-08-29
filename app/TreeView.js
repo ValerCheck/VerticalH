@@ -12,7 +12,7 @@ window.Node = React.createClass({
 
 		return React.createElement("div",{
 			className : "tree-node",
-			key : self.id
+			key : self.id,
 			onClick : function(e){
 				e.stopPropagation();
 				store.dispatch(TOGGLE_NODE(self.id));
