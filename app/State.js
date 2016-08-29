@@ -3,7 +3,7 @@ var nextNodeId = 0;
 const ADD_NODE = function(title,children){
   return {
     type : 'ADD_NODE',
-    id : nextNodeId++,
+    id : ++nextNodeId,
     title,
     children
   }
@@ -64,11 +64,41 @@ function treeViewReducer(state, action){
       }
       else return state;
     case 'TOGGLE_NODE':
-      return {
-        data : state.data.map(function(node){
-            return nodeReducer(node,action);
-          })
+      var stack = [], parent, data;
+      var closest = {
+        parent : undefined,
+        data : state.data[0],
+        index : 0
       }
+
+      while (closest.data.id != action.id) {
+        parent = closest;
+        stack.push(parent);
+        var indexes = [];
+        var closest = parent.data
+        .children.filter(function(el,i){
+          var cond = (action.id >= el.id);
+          if (cond) indexes.push(i);
+          return cond;
+        });
+        if (closest.length) closest = closest[closest.length-1];
+        closest = {
+          parent  : parent,
+          data    : closest,
+          index   : indexes[indexes.length - 1]
+        }
+      }
+
+      closest.data = nodeReducer(closest.data,action);
+
+      while (stack.length) {
+        parent = stack.pop();
+        parent.data.children[parent.index] = closest.data;
+        closest = parent;
+      }
+
+      data = [closest.data];
+      return { data }
     default:
       return state;
   }
