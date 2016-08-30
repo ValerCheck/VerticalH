@@ -8,6 +8,10 @@ $header-color : skyblue
   -webkit-transition : $transition
   transition : $transition
 
+html,
+body
+  height: 100%
+
 body
   font-family: $font-general
   color : $color-general
@@ -58,7 +62,33 @@ header
   background-color: $header-color
   display: block
 
+.main-content
+  width: 75%
+  white-space: pre-line
+  text-align: center
+
+.welcome-message
+  margin-top: 100px
+  line-height: 50px
+  &:first-line
+    line-height: normal
+    font-size: 50px
+    font-weight: bold
+
+.app-content
+  &:before,
+  &:after
+    content: ''
+    display: block
+    clear: both
+
+.main-content,
 .tree-view
+  float: left
+
+.tree-view
+  box-sizing: border-box
+  width: 25%
   padding: 10px
   .expander
     font-size: 20px
@@ -71,6 +101,16 @@ header
     &.hide
       display: none
 
+.tree-view-title
+  font-size: 30px
+  font-weight: bold
+  text-align: center
+  border-top: 2px solid darkolivegreen
+  border-bottom: 2px solid darkolivegreen
+  margin: 0
+  margin-bottom: 10px
+  padding: 10px
+
 .tree-node
   .children
     padding-left: 20px
@@ -81,6 +121,7 @@ header
     display: none
   .title
     text-transform: uppercase
+    font-size: 20px
     display: inline-block
     cursor: pointer
     &.leaf

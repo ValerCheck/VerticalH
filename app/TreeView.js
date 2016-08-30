@@ -69,7 +69,9 @@ window.TreeView = React.createClass({
 			}));
 		});
 
-		return React.createElement("div",{className:"tree-view"},nodes);
+		return React.createElement("div",{className:"tree-view"},
+			React.createElement("h3",{className:"tree-view-title"},"CounTree")
+		,nodes);
 	}
 });
 
